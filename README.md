@@ -10,6 +10,7 @@ A Node.js/Express backend API server for detecting AI-generated text using machi
 - CORS enabled for frontend communication
 - Environment-based configuration
 - Health check endpoint
+- **Modular Architecture** with proper separation of concerns
 
 ## Tech Stack
 
@@ -19,6 +20,33 @@ A Node.js/Express backend API server for detecting AI-generated text using machi
 - **Axios** - HTTP client for external APIs
 - **CORS** - Cross-origin resource sharing
 - **dotenv** - Environment variable management
+
+## Project Structure
+
+```
+ai-text-detector-server/
+├── src/
+│   ├── config/
+│   │   └── swagger.js          # Swagger configuration
+│   ├── controllers/
+│   │   ├── textController.js   # Text analysis controller
+│   │   └── healthController.js # Health check controller
+│   ├── middleware/
+│   │   ├── validation.js       # Input validation middleware
+│   │   └── errorHandler.js     # Error handling middleware
+│   ├── routes/
+│   │   ├── textRoutes.js       # Text analysis routes
+│   │   └── healthRoutes.js     # Health check routes
+│   ├── services/
+│   │   └── aiDetectionService.js # AI detection business logic
+│   ├── utils/
+│   │   └── logger.js           # Logging utility
+│   ├── app.js                  # Express app configuration
+│   └── server.js               # Server entry point
+├── package.json                # Dependencies and scripts
+├── README.md                   # This file
+└── STARTUP.md                  # Quick start guide
+```
 
 ## Quick Start
 
@@ -44,6 +72,7 @@ npm install
 # Create .env file
 HUGGINGFACE_API_KEY=your_api_key_here
 PORT=5000
+NODE_ENV=development
 ```
 
 ### Running the Server
@@ -62,10 +91,11 @@ The server will be available at:
 - **API**: http://localhost:5000
 - **Health Check**: http://localhost:5000/health
 - **API Documentation**: http://localhost:5000/api-docs
+- **Text Analysis**: http://localhost:5000/api/detect-text
 
 ## API Endpoints
 
-### POST /detect-text
+### POST /api/detect-text
 Analyzes text to determine if it's AI-generated or human-written.
 
 **Request:**
@@ -93,9 +123,40 @@ Returns server health status.
 ```json
 {
   "status": "OK",
-  "message": "AI Text Detector API is running"
+  "message": "AI Text Detector API is running",
+  "timestamp": "2023-01-01T00:00:00.000Z",
+  "apiKeyConfigured": true
 }
 ```
+
+## Architecture
+
+### Controllers
+- Handle HTTP requests and responses
+- Validate input data
+- Call appropriate services
+- Return formatted responses
+
+### Services
+- Contain business logic
+- Handle external API calls
+- Process data and return results
+
+### Routes
+- Define API endpoints
+- Connect URLs to controllers
+- Apply middleware
+
+### Middleware
+- Input validation
+- Error handling
+- Request logging
+- CORS configuration
+
+### Configuration
+- Swagger documentation setup
+- Environment variables
+- Application settings
 
 ## Configuration
 
@@ -105,6 +166,7 @@ Returns server health status.
 |----------|-------------|---------|
 | `HUGGINGFACE_API_KEY` | Hugging Face API key for AI detection | Required |
 | `PORT` | Server port | 5000 |
+| `NODE_ENV` | Environment (development/production) | development |
 
 ### Hugging Face API Setup
 
@@ -127,19 +189,17 @@ Features:
 
 ## Development
 
-### Project Structure
-```
-ai-text-detector-server/
-├── server.js          # Main server file
-├── .env              # Environment variables
-├── package.json      # Dependencies and scripts
-└── README.md         # This file
-```
-
 ### Scripts
 - `npm start` - Start production server
 - `npm run dev` - Start development server with nodemon
 - `npm test` - Run tests (placeholder)
+
+### Adding New Features
+
+1. **New Controller**: Create in `src/controllers/`
+2. **New Service**: Create in `src/services/`
+3. **New Route**: Create in `src/routes/` and register in `app.js`
+4. **New Middleware**: Create in `src/middleware/`
 
 ## Testing
 
@@ -151,7 +211,7 @@ ai-text-detector-server/
 ### Using curl
 ```bash
 # Test text detection
-curl -X POST http://localhost:5000/detect-text \
+curl -X POST http://localhost:5000/api/detect-text \
   -H "Content-Type: application/json" \
   -d '{"text": "This is a sample text to analyze"}'
 

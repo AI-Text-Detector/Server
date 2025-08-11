@@ -1,70 +1,83 @@
-# Server Startup Guide
+# AI Text Detector Server - Quick Start
 
-## Quick Start
+## 🚀 Quick Setup
 
 ### 1. Install Dependencies
 ```bash
 npm install
 ```
 
-### 2. Set Up Environment
+### 2. Start the Server
+```bash
+# Development mode (with auto-restart)
+npm run dev
+
+# Production mode
+npm start
+```
+
+### 3. Access Points
+- **Server**: http://localhost:5000
+- **Health Check**: http://localhost:5000/health
+- **API Documentation**: http://localhost:5000/api-docs
+- **Text Analysis**: http://localhost:5000/api/detect-text
+
+## 📁 Project Structure
+
+```
+ai-text-detector-server/
+├── src/
+│   ├── config/          # Configuration files
+│   ├── controllers/     # Request handlers
+│   ├── middleware/      # Custom middleware
+│   ├── routes/          # API routes
+│   ├── services/        # Business logic
+│   ├── utils/           # Utility functions
+│   ├── app.js           # Express app setup
+│   └── server.js        # Server entry point
+├── package.json         # Dependencies
+└── README.md           # Full documentation
+```
+
+## 🔧 Configuration
+
+### Environment Variables (Optional)
 Create a `.env` file in the root directory:
 ```env
 HUGGINGFACE_API_KEY=your_api_key_here
 PORT=5000
+NODE_ENV=development
 ```
 
-### 3. Start the Server
+**Note**: Without an API key, the server runs in demo mode.
 
-#### Development Mode (with auto-restart)
+## 🧪 Testing
+
+### Test with Swagger UI
+1. Start server: `npm run dev`
+2. Open: http://localhost:5000/api-docs
+3. Use interactive interface
+
+### Test with curl
 ```bash
-npm run dev
-```
-
-#### Production Mode
-```bash
-npm start
-```
-
-### 4. Verify Server is Running
-- **API**: http://localhost:5000
-- **Health Check**: http://localhost:5000/health
-- **API Documentation**: http://localhost:5000/api-docs
-
-## API Testing
-
-### Using Swagger UI
-1. Open http://localhost:5000/api-docs
-2. Click on any endpoint
-3. Click "Try it out"
-4. Enter test data and click "Execute"
-
-### Using curl
-```bash
-# Test health endpoint
+# Health check
 curl http://localhost:5000/health
 
-# Test text detection
-curl -X POST http://localhost:5000/detect-text \
+# Text analysis
+curl -X POST http://localhost:5000/api/detect-text \
   -H "Content-Type: application/json" \
-  -d '{"text": "This is a sample text to analyze"}'
+  -d '{"text": "Hello world"}'
 ```
 
-## Troubleshooting
+## 📚 Next Steps
 
-### Port Already in Use
-Change the PORT in your `.env` file:
-```env
-PORT=5001
-```
+- Read the full [README.md](README.md) for detailed documentation
+- Configure your Hugging Face API key for real AI detection
+- Explore the modular architecture in the `src/` folder
+- Check out the API documentation at `/api-docs`
 
-### Missing Dependencies
-```bash
-rm -rf node_modules package-lock.json
-npm install
-```
+## 🆘 Troubleshooting
 
-### API Key Issues
-- Get a Hugging Face API key from https://huggingface.co/settings/tokens
-- Add it to your `.env` file
-- Without an API key, the server runs in demo mode
+- **Port already in use**: Change PORT in .env file
+- **Module not found**: Run `npm install`
+- **API errors**: Check Hugging Face API key configuration
